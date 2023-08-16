@@ -20,8 +20,6 @@ const App = () => {
     },
   ]);
   const [filter, setFilter] = useState("");
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
 
   useEffect(() => {
     // Get contacts from the server
@@ -79,16 +77,6 @@ const App = () => {
 
     // Set the contacts in the state
     setContacts(filteredContacts);
-  };
-
-  const handleChangeName = (event) => {
-    // Set the name in the state
-    setName(event.target.value);
-  };
-
-  const handleChangeNumber = (event) => {
-    // Set the number in the state
-    setNumber(event.target.value);
   };
 
   return (
