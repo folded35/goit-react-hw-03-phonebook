@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import AddContactForm from "../components/AddContactForm/AddContactForm";
 import Filter from "../components/Filter/Filter";
@@ -6,27 +6,9 @@ import ContactList from "../components/ContactList/ContactList";
 
 import styles from "../App/App.module.css";
 
-const App = () => {
-  const [contacts, setContacts] = useState([
-    {
-      id: '1',
-      name: 'Naruto Uzumaki',
-      phone: '0888888888',
-    },
-    {
-      id: 2,
-      name: "Sasuke Uchiha",
-      phone: "0777777777",
-    },
-  ]);
-  const [filter, setFilter] = useState("");
-
-  useEffect(() => {
-    // Get contacts from the server
-    // ...
-
-    // Set the contacts in the state
-    setContacts([
+class App extends React.Component {
+  state = {
+    contacts: [
       {
         id: 'id-1',
         name: 'Rosie Simpson',
@@ -47,59 +29,79 @@ const App = () => {
         name: 'Annie Copeland',
         number: '0972279126',
       },
-    ]);
-  }, []);
+    ],
+    filter: "",
+  };
 
-  const handleAddContact = (newContact) => {
+  constructor(props) {
+    super(props);
+
+    this.handleAddContact = this.handleAddContact.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+  }
+
+  handleAddContact(newContact) {
     // Add the new contact to the state
-    setContacts([...contacts, newContact]);
-  };
+    this.setState({
+      contacts: [...this.state.contacts, newContact],
+    });
+  }
 
-  const handleFilter = (event) => {
+  handleFilter(event) {
     // Set the filter in the state
-    setFilter(event.target.value);
-  };
+    this.setState({
+      filter: event.target.value,
+    });
+  }
 
-  const handleDelete = (id) => {
+  handleDelete(id) {
     // Get the filtered contacts
-    const filteredContacts = contacts.filter((contact) => contact.id !== id);
+    const filteredContacts = this.state.contacts.filter((contact) => contact.id !== id);
 
     // Set the contacts in the state
-    setContacts(filteredContacts);
-  };
+    this.setState({
+      contacts: filteredContacts,
+    });
+  }
 
-  const handleSearch = (event) => {
+  handleSearch(event) {
     // Get the filtered contacts
-    const filteredContacts = contacts.filter((contact) =>
+    const filteredContacts = this.state.contacts.filter((contact) =>
       contact.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
       contact.phone.toLowerCase().includes(event.target.value.toLowerCase())
     );
 
     // Set the contacts in the state
-    setContacts(filteredContacts);
-  };
+    this.setState({
+      contacts: filteredContacts,
+    });
+  }
 
-  return (
-    <div className={styles.mainContainer}>
-      <h1>Phonebook</h1>
-      <AddContactForm
-        handleAddContact={handleAddContact}
-        contacts={contacts}
-      />
+  render() {
+    return (
+      <div className={styles.mainContainer}>
+        <h1>Phonebook</h1>
+        <AddContactForm
+          handleAddContact={this.handleAddContact}
+          contacts={this.state.contacts}
+        />
 
-      <h2>Contacts</h2>
-      <Filter
-        filterText={filter}
-        handleFilter={handleFilter}
-      />
-      <ContactList
-        contacts={contacts}
-        filterText={filter}
-        handleDelete={handleDelete}
-        handleSearch={handleSearch}
-      />
-    </div>
-  );
-};
+        <h2>Contacts</h2>
+        <Filter
+          filterText={this.state.filter}
+          handleFilter={this.handleFilter}
+        />
+        <ContactList
+          contacts={this.state.contacts}
+          filterText={this.state.filter}
+          handleDelete={this.handleDelete}
+          handleSearch={this.handleSearch}
+        />
+      </div>
+    );
+  }
+}
 
 export default App;
