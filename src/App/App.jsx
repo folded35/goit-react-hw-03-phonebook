@@ -79,6 +79,24 @@ class App extends React.Component {
     });
   }
 
+  // Сохранение контактов в localStorage
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts'); // Получаем данные из localStorage.
+    const parsedContacts = JSON.parse(contacts); // Преобразуем данные из строки JSON в объект JavaScript.
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts }); // Устанавливаем полученные контакты в обьект "contacts".
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      // Сравниваем текущие контакты с предыдущим обьектом контактов.
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+      // Если контакты изменились, сохраняем их в localStorage.
+    }
+  }
+
   render() {
     return (
       <div className={styles.mainContainer}>
